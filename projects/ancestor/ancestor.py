@@ -45,11 +45,11 @@ def earliest_ancestor(ancestors, starting_node):
             # Mark as visited (i.e. add to the visited set)
             visited.add(v)
             
-            for g in get_parents(v, ancestors):
-                if g:
-                    parents = set()                   
-                    parents.add(g)
-                    s.push(g)
+    for g in get_parents(v, ancestors):
+        if g:
+            parents = set()                   
+            parents.add(g)
+            s.push(g)
 
     if len(parents) > 0:
         return min(parents)

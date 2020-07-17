@@ -90,7 +90,7 @@ def move_rooms(starting_room, visited=None, path=None):
     return path
 
 traversal_path = move_rooms(player.current_room)
-print(traversal_path)
+# print(traversal_path)
 
 # TRAVERSAL TEST
 visited_rooms = set()

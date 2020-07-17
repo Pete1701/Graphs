@@ -5,6 +5,19 @@ from world import World
 import random
 from ast import literal_eval
 
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
+
 # Load world
 world = World()
 
@@ -29,7 +42,55 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+directions = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
 
+def move_rooms(starting_room, visited=None, path=None):
+    # initializing my path and visited rooms
+    if visited is None:
+        visited = set()
+    if path is None:
+        path = []
+
+    # add starting room to visited
+    visited.add(starting_room)
+    
+    # add starting room to current path
+    # path = path + [starting_room]
+    path.append(starting_room)
+
+    # loop, go through the directions from the current room forward
+    for exit in player.current_room.get_exits():
+        # move player that direction
+        player.travel(exit)
+
+        # new room is the room player just moved in
+        new_room = player.current_room
+        
+        # if new room has not been visited, add it to visited
+        if new_room not in visited:
+            visited.add(new_room)
+             
+            # add direction to path
+            path.append(exit)
+
+            # recurse through function to add more rooms and directions to visited & path
+            path = path + move_rooms(new_room, visited)
+
+            # once no more new rooms in that direction, move back to starting room
+            player.travel(directions[exit])
+
+            # add to path
+            path.append(directions[exit])
+
+        # else if new room has already been visited, move back to previous room    
+        else:
+            player.travel(directions[exit])
+
+    # print(path)
+    return path
+
+traversal_path = move_rooms(player.current_room)
+# print(traversal_path)
 
 # TRAVERSAL TEST
 visited_rooms = set()
@@ -51,12 +112,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")

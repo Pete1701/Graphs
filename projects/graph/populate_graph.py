@@ -96,9 +96,3 @@ def get_all_social_paths(self, user_id):
 #                 new_path.append(id)
 #                 path_queue.append(new_path)
 #                 visited[friend_id] = path
-
-
-
-
-
-
